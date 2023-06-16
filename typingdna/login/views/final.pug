@@ -1,0 +1,107 @@
+extends layout
+block content
+    div.container
+        //Finish learn
+        include ./flash
+        div#final.step.contact-form-inner.form-horizontal(style={"display":"inline", "opacity":1, "padding":"15px 40px 0"})
+            if wrongPassword
+                .form-group
+                    p#title
+                        | Credentials don’t match.
+                .form-group
+                    div
+                        | The typed
+                        b   password is incorrect.
+                        |  Please try again by using the correct password associated with this email.
+                        br
+                .form-group
+
+                    form#sbmForm(method="post")
+                        | If you forgot the password,
+                        a(href="javascript: submitform()")  click here to reset.
+                    div(style={'padding-top': '20px'})
+                        button#btn_next.btn.btn-finance(onclick="restart();" role="button" style='float:left; margin-right: 20px;')
+                            b Try Again
+                    a.btn.btn-colors.btn-s(href="http://localhost:3000/login", role="button", style={"position": "absolute", "top": "0", "right": "0", "margin-top": "10px" , "margin-right": "10px"}) Logout
+            else if action === 'verify'
+                if lastResult.result === 1
+                    h4.result-title(style={'margin-left': '-15px'}) Authentication succeeded!
+                    .form-group.demo-bm
+                        .panel.panel-default.panel-result(style="margin-bottom: 5px;")
+                            .panel-body
+                                .col-md-8.col-xs-12.demo-result
+                                    div.name TypingDNA result
+                                        span.result-green #{lastResult.result === 1 ? 'true' : 'false'}
+                                    div.name Confidence
+                                        span.result #{lastResult.highConfidence == 1 ? 'High' : 'Low' }    
+                                    div.name Device
+                                        span.result #{device}
+                                    div.name Enrollments
+                                        span.result#enrollments #{enrollments}
+                        if showEnrollMessage
+                            i.fa.fa-check(style='color:#1fb01f')
+                            p#autoenroll(style='display:inline;') This typing pattern has been automatically <b>enrolled</b>, as the <b>score > 90</b>
+                        div(style={'padding-top': '20px'})
+                            a.btn.btn-colors.btn-s(onclick="restart();" role="button" style={'margin-top':'20px'})
+                                b Try again          
+                    span.result-title
+                else
+                    .form-group(style="margin-bottom: 5px;")
+                        h4.result-title Authentication failed!
+                    .form-group.demo-bm
+                        .panel.panel-default.panel-result
+                            .panel-body
+                                .col-md-8.col-xs-12.demo-result
+                                    div.name TypingDNA result
+                                        span.result-red #{lastResult.result === 1 ? 'true' : 'false'}
+                                    div.name Confidence
+                                        span.result #{lastResult.highConfidence == 1 ? 'High' : 'Low' }    
+                                    div.name Device
+                                        span.result #{device}
+                                    div.name Enrollments
+                                        span.result#enrollments #{enrollments}
+                        div(style={'padding-top': '20px'})
+                                button#btn_next.btn.btn-finance(onclick="restart();" role="button" style='float:left; margin-right: 20px;')
+                                    b Try Again
+            else
+                .form-group
+                    h4.result-title
+                        if enrollments >= 3
+                            | Registration finished! Try to authenticate.
+                        else
+                            | Congratulations, you have enrolled a new pattern!
+                .form-group
+                    span.result-title
+                    div
+                        if enrollments >= 3
+                            | You have
+                            b   successfully registered.
+                            |  Use the same email and password, in order to demo the typing biometrics authentication.
+                        else
+                            | For a successful authentication, you need at least #{3 - enrollments} more typing pattern#{3- enrollments > 1 ? 's' : ''}.
+                        br
+                    div(style={'padding-top': '20px'})
+                        button#btn_next.btn.btn-finance(onclick="restart();" role="button" style='float:left; margin-right: 20px;')
+                            if enrollments >= 3
+                                b Try Authentication
+                            else
+                                b Continue
+        //Loading
+        div.step.form-group(id="step_loading")
+            .loader(style="top: 50%;left: 50%;margin: -50px 0 0 -25px; width: 50px;height: 50px;")
+    a.btn.btn-colors.btn-s(href="http://localhost:3000/", role="button", style={"position": "absolute", "top": "0", "right": "0", "margin-top": "10px" , "margin-right": "10px"}) Home
+
+    script.
+        function submitform() {
+            swapContent('final', 'step_loading');
+            var form = document.getElementById('sbmForm')
+            form && form.submit()
+        }
+        (function() {
+            if(!isIframe()) {
+                var note = document.getElementById('note');
+                if(note) {
+                    note.style.display = 'block';
+                }
+            }
+        })();
