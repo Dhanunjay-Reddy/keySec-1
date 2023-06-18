@@ -8,4 +8,7 @@ The typing dna api uses the machine learning alogorithms to record and match the
 To run the app in the local environment.
 1. Go to the React_Auth0 folder and type "npm start"
 2. Go the typing dna folder and to each folder (three folders sametext, anytext, login) and type "npm start" in each folder seperately.
-3. check wheather the programs are running 
+3. check wheather the programs are running without errors.
+4. Now go to localhost 3000 port in any browser. You will see Keysec Web app running
+
+
